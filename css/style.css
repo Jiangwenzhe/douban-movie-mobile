@@ -5,15 +5,24 @@
   box-sizing: border-box;
 }
 
-html, body {
-  height: 100%;
+html{
+   /* height:100%; */
 }
 
+
+
 body{
+  overflow: scroll;
+  /* height: 100%; */
+  font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
   font-size: 12px;
   line-height: 1.2;
-  background-color: #fff;
+  background-color: #f2f2f2;
   position: relative;
+  background-image: radial-gradient(#bfc0c1 7.2%, transparent 0);
+  background-size: 25px 25px;
+  background-repeat:no-repeat;
+   background-attachment:scroll;
 }
 
 a {
@@ -28,7 +37,7 @@ a {
 }
 /* main */
 main {
-  height: calc(100vh - 50px);
+  height: 100%;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
 }
@@ -59,15 +68,29 @@ main>section:first-child {
 
 /* footer */
 footer {
-  position: absolute;
-  bottom: 0;
-  height: 50px;
-  width: 100%;
+  position: fixed;
+  bottom: 0px;
+  padding: 5px;
+  width: 95%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
-  border-radius: 2px 2px 0 0;
-  background-color: #fff;
+  border-radius: 4px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
+
+.backdrop-blur {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+@supports ((-webkit-backdrop-filter: blur(2em)) or (backdrop-filter: blur(2em))) {
+  .backdrop-blur {
+    background-color: rgba(255, 255, 255, .5);
+    -webkit-backdrop-filter: blur(2em);
+    backdrop-filter: blur(2em);
+  }
+}
+
 
 footer>div {
   flex: 1;
@@ -80,7 +103,6 @@ footer>div>span {
 }
 
 footer>div>span.iconfont {
-  padding-top: 5px;
   font-size: 21px;
 }
 
@@ -94,7 +116,9 @@ footer .active {
   border-radius: 4px;
   margin: 10px auto;
   padding: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  background: #fafafa;
+  box-shadow: 0 3px 5px 0 rgba(0,0,0,0.2);
+  /* box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
 }
 
 .card a {
@@ -125,3 +149,35 @@ footer .active {
   color: #FF5722;
   font-weight: bold;
 }
+
+/* search box */
+#search {
+  height: calc(100% - 45px);
+}
+section .search-area{
+  padding: 5px;
+  width: 90%;
+  margin: 10px auto;
+  color: #333;
+  position: relative;
+  border-radius: 5px;
+  box-shadow: 0 3px 5px 0 rgba(0,0,0,0.2);
+}
+section .search-area input {
+  width: calc(100% - 50px);
+  padding: 8px;
+  background-color: #eee;
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+section .search-area .button{
+  position: absolute;
+  right: 5px ;
+  padding: 8px 10px;
+  background: #00B51D;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+

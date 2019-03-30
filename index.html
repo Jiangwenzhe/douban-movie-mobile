@@ -3,12 +3,13 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="referrer" content="never">
   <title>豆瓣电影</title>
   <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
-  <link rel="stylesheet" href="//at.alicdn.com/t/font_1115354_brk8abu4en9.css">
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1115354_p91yuv7vr0d.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -18,11 +19,25 @@
       <div id="top"></div>
       <div class="loading"><span class="iconfont icon-jiazai_dan"></span></div>
     </section>
-    <section>23</section>
-    <section>3</section>
+    <section>
+      <div id="ontheater"></div>
+      <h1>Ontheater</h1>
+    </section>
+    <section>
+      <div id="search">
+        <div class="wrap">
+          <div class="search-area">
+            <input type="text" placeholder="搜索电影"><span class="button"> 搜索</span>
+          </div>
+          <div class="search-result">
+            <div class="container"></div>
+            <div class="loading"><span class="iconfont icon-loading"></span> </div>
+          </div>
+        </div>
+    </section>
 
   </main>
-  <footer>
+  <footer class="backdrop-blur">
     <div class="active">
       <span class="iconfont icon-paihangbang"></span>
       <span>排行榜</span>
