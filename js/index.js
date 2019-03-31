@@ -1,3 +1,9 @@
+// $(window).scroll(function(){
+//   console.log('top的高度： ', $('#top').height())
+//   console.log('文档的高度： ',$(document).height())
+//   console.log('ontheater的高度： ',$('#ontheater').height())
+// })
+
 var topMovie = {
   init: function(){
     console.log('topMovie')
@@ -12,6 +18,7 @@ var topMovie = {
     var _this = this
     window.addEventListener('scroll',function(){
       if(_this.isOnBottom()){
+        console.log('top 渲染数据')
          _this.loadAndrender()
       }
     })
@@ -23,7 +30,7 @@ var topMovie = {
     })
   },
   loadData: function(callback) {
-    console.log('loading data...')
+    // console.log('loading data...')
     var _this = this
     if(_this.isLoading) {
       return;
@@ -54,7 +61,7 @@ var topMovie = {
 
   },
   renderData: function(data) {
-    console.log('rendering data...')
+    // console.log('rendering data...')
     var _this = this
     data.subjects.forEach(function (movie) {
       var cardhtml = '<div class="card"> \
@@ -91,7 +98,8 @@ var topMovie = {
   }
   ,
   isOnBottom: function() {
-    return ($(document).height()-20 <= $(window).scrollTop() + $(window).height())
+    var pageHight = this.$top.height() ;
+    return (pageHight? (pageHight <= $(window).scrollTop() + $(window).height()) : false )
   }
 }
 
@@ -108,7 +116,8 @@ var onTheater = {
   bind: function(){
     var _this = this
     window.addEventListener('scroll',function(){
-      if(_this.isOnBottom()){
+      console.log("总高度： ",_this.$ontheater.height() , " 两个相加：",  $(window).scrollTop() + $(window).height())
+      if(_this.isOnBottom() && _this.index<=40){
          _this.loadAndrender()
       }
     })
@@ -120,7 +129,7 @@ var onTheater = {
     })
   },
   loadData: function(callback) {
-    console.log('loading data...')
+    // console.log('loading data...')
     var _this = this
     if(_this.isLoading) {
       return;
@@ -142,6 +151,7 @@ var onTheater = {
         _this.isFinish = true
       }
       callback&&callback(ret)
+      console.log(_this.index)
     }).fail(function () {
       console.log('top get data error')
     }).always(function(){
@@ -151,7 +161,7 @@ var onTheater = {
 
   },
   renderData: function(data) {
-    console.log('rendering data...')
+    // console.log('rendering data...')
     var _this = this
     data.subjects.forEach(function (movie) {
       var cardhtml = '<div class="card"> \
@@ -188,19 +198,94 @@ var onTheater = {
   }
   ,
   isOnBottom: function() {
-    return ($(document).height()-20 <= $(window).scrollTop() + $(window).height())
+    var pageHight = this.$ontheater.height() ;
+    return (pageHight? (pageHight <= $(window).scrollTop() + $(window).height()) : false )
   }
 }
 
 var search= {
   init: function(){
     console.log('search...')
+    this.$search = $('#search')
+    this.$btn = $('#searchBtn')
+    this.keyword = ''
+    this.$searchResult = $('.search-result')
+    this.bind()
+    // this.loadAndrender()
+
   },
   bind: function(){
+    var _this = this
+    this.$btn.on('click', function(){
+      _this.keyword = $('#inputvalue').val()
+      console.log(_this.keyword)
+      _this.loadAndrender()
+    })
+  },
+  loadAndrender: function(){
+    var _this = this
+    this.loadData(function(data){
+      _this.renderData(data)
+    })
+  },
+  loadData: function(callback) {
+    // console.log('loading data...')
+    var _this = this
+    _this.isLoading = true
+    _this.$searchResult.parents().find('.loading').show()
+    $.ajax({
+      url: 'https://api.douban.com/v2/movie/search',
+      type: 'GET',
+      data: {
+        q: _this.keyword
+      },
+      dataType: 'jsonp'
+    }).done(function (ret) {
+      console.log(ret)
+      callback&&callback(ret)
+    }).fail(function () {
+      console.log('top get data error')
+    }).always(function(){
+      _this.isLoading = false
+      _this.$searchResult.parents().find('.loading').hide()
+    })
 
   },
-  start: function(){
-
+  renderData: function(data) {
+    console.log('rendering data...')
+    var _this = this
+    data.subjects.forEach(function (movie) {
+      var cardhtml = '<div class="card"> \
+      <a href="https://movie.douban.com/subject/1292052/"> \
+        <div class="cover"> \
+          <img  src=""  alt=""> \
+        </div> \
+        <div class="detail"> \
+          <h2></h2>\
+          <div class="extra"><span class="score"></span> / <span class="collection"></span> 收藏</div>\
+          <div class="extra"><span class="year"></span> / <span class="type"></span></div>\
+          <div class="extra"><span class="director"></span> </div>\
+          <div class="extra"><span class="casts"></span></div>\
+          <div class="extra"></div> \
+        </div> \
+      </a> \
+    </div>'
+      var card = $(cardhtml)
+      card.find('a').attr('href', movie.alt)
+      card.find('.cover img').attr('src',movie.images.medium)
+      card.find('h2').text(movie.title)
+      card.find('.score').text(movie.rating.average)
+      card.find('.collection').text(movie.collect_count)
+      card.find('.year').text(movie.year)
+      card.find('.type').text(movie.genres.join('、'))
+      card.find('.director').text('导演：'+movie.directors.map(function(director){
+        return director.name
+      }).join('、'))
+      card.find('.casts').text('演员：'+movie.casts.map(function(cast){
+        return cast.name
+      }).join('、'))
+      _this.$searchResult.append(card)
+    })
   }
 }
 
@@ -218,6 +303,7 @@ var app  = {
   bind: function(){
     var _this = this
     this.$tabs.on('click', function(){
+    $(window).scrollTop(0,0);
     _this.$sections.hide().eq($(this).index()).fadeIn()
     $(this).addClass('active').siblings().removeClass('active')
     })
