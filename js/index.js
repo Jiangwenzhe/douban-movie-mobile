@@ -218,7 +218,7 @@ var search= {
     var _this = this
     this.$btn.on('click', function(){
       _this.keyword = $('#inputvalue').val()
-      console.log(_this.keyword)
+      _this.$searchResult.empty()
       _this.loadAndrender()
     })
   },
